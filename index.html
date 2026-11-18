@@ -35,7 +35,7 @@
     />
     <meta name="twitter:image" content="https://acs-epseen.vercel.app/og.jpg" />
   </head>
-  <body>
+  <body class="is-welcome">
     <div class="scene" aria-hidden="true">
       <picture class="meadow-bg">
         <source
@@ -64,7 +64,22 @@
     <div class="vignette" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
 
-    <div class="app">
+    <section class="welcome" id="welcome" aria-labelledby="welcome-title">
+      <p class="eyebrow">Saturday · 21 November 2026</p>
+      <h1 id="welcome-title">
+        <span class="script">A Jar of Wishes for</span>
+        <span class="names">ACS <span class="amp">&amp;</span> Epseen</span>
+      </h1>
+      <p class="welcome-lead">
+        Friends and family left little letters of love for your wedding day. Each one is tucked inside this jar, waiting to be opened.
+      </p>
+      <p class="welcome-how">
+        Tap the jar to open it, then pick a letter to read. New wishes keep arriving, so come back anytime.
+      </p>
+      <button type="button" class="welcome-enter" id="enter">Open the jar</button>
+    </section>
+
+    <div class="app" id="app">
       <header class="hero">
         <p class="eyebrow">Saturday · 21 November 2026</p>
         <h1>

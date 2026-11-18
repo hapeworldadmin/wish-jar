@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07140f" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+    <title>Wishes for ACS &amp; Epseen</title>
+    <meta
+      name="description"
+      content="A glowing jar of wedding wishes for Angeline (ACS) and Epseen. Saturday, 21 November 2026."
+    />
+    <link rel="canonical" href="https://acs-epseen.vercel.app/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Wishes for ACS &amp; Epseen" />
+    <meta property="og:title" content="Wishes for ACS &amp; Epseen" />
+    <meta
+      property="og:description"
+      content="A glowing jar of wedding wishes for Angeline and Epseen. Saturday, 21 November 2026."
+    />
+    <meta property="og:url" content="https://acs-epseen.vercel.app/" />
+    <meta property="og:image" content="https://acs-epseen.vercel.app/og.jpg" />
+    <meta property="og:image:secure_url" content="https://acs-epseen.vercel.app/og.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A glowing glass jar of wishes on moss under a night sky" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Wishes for ACS &amp; Epseen" />
+    <meta
+      name="twitter:description"
+      content="A glowing jar of wedding wishes for Angeline and Epseen. Saturday, 21 November 2026."
+    />
+    <meta name="twitter:image" content="https://acs-epseen.vercel.app/og.jpg" />
+  </head>
+  <body>
+    <div class="scene" aria-hidden="true">
+      <div class="trees"></div>
+      <div class="clouds">
+        <i class="cloud c1"></i>
+        <i class="cloud c2"></i>
+        <i class="cloud c3"></i>
+      </div>
+      <div id="stars"></div>
+      <div id="fireflies"></div>
+      <svg class="meadow" viewBox="0 0 1440 640" preserveAspectRatio="xMidYMax slice">
+        <defs>
+          <linearGradient id="hill-back" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#184e32" />
+            <stop offset="1" stop-color="#0c3422" />
+          </linearGradient>
+          <linearGradient id="hill-mid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1f6b40" />
+            <stop offset="1" stop-color="#0e4128" />
+          </linearGradient>
+          <linearGradient id="hill-front" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#2f8a52" />
+            <stop offset="0.5" stop-color="#1c6a40" />
+            <stop offset="1" stop-color="#145734" />
+          </linearGradient>
+          <filter id="moss-grain" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="4" result="noise" />
+            <feColorMatrix
+              in="noise"
+              type="matrix"
+              values="0 0 0 0 0.05  0 0 0 0 0.16  0 0 0 0 0.08  0 0 0 0.22 0"
+              result="tint"
+            />
+            <feBlend in="SourceGraphic" in2="tint" mode="overlay" />
+          </filter>
+        </defs>
+        <g filter="url(#moss-grain)">
+          <path
+            fill="url(#hill-back)"
+            d="M0 210 C 160 120, 280 250, 470 170 C 690 80, 860 230, 1100 150 C 1260 100, 1360 190, 1440 140 L 1440 640 L 0 640 Z"
+          />
+          <path
+            fill="url(#hill-mid)"
+            d="M0 300 C 180 230, 360 370, 620 280 C 900 180, 1120 340, 1440 250 L 1440 640 L 0 640 Z"
+          />
+          <path
+            fill="#103f28"
+            d="M0 400 C 240 340, 520 470, 820 390 C 1100 320, 1280 450, 1440 380 L 1440 640 L 0 640 Z"
+          />
+          <path
+            fill="url(#hill-front)"
+            d="M0 470 C 200 430, 420 530, 700 460 C 980 390, 1200 510, 1440 450 L 1440 640 L 0 640 Z"
+          />
+          <ellipse cx="720" cy="520" rx="260" ry="48" fill="#f0cc78" opacity="0.16" />
+          <ellipse cx="260" cy="560" rx="140" ry="26" fill="#3e9a5e" opacity="0.35" />
+          <ellipse cx="1120" cy="545" rx="180" ry="30" fill="#8fd0ff" opacity="0.08" />
+          <ellipse cx="860" cy="590" rx="220" ry="28" fill="#17643a" opacity="0.55" />
+        </g>
+        <g id="meadow-life"></g>
+      </svg>
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="app">
+      <header class="hero">
+        <p class="eyebrow">Saturday · 21 November 2026</p>
+        <h1>
+          <span class="script">Wishes for</span>
+          <span class="names">ACS <span class="amp">&amp;</span> Epseen</span>
+        </h1>
+        <p class="count" id="count">11 wishes inside</p>
+      </header>
+
+      <div class="stage">
+        <div class="jar" id="jar">
+          <div class="bloom" aria-hidden="true"></div>
+          <svg class="ribbon" viewBox="0 0 200 240" aria-hidden="true">
+            <defs>
+              <linearGradient id="ribbon-gold" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stop-color="#fff6d2" stop-opacity="0.95" />
+                <stop offset="0.45" stop-color="#ffd56a" stop-opacity="0.7" />
+                <stop offset="1" stop-color="#fff4c8" stop-opacity="0" />
+              </linearGradient>
+              <filter id="ribbon-blur" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="1.4" />
+              </filter>
+            </defs>
+            <path
+              d="M104 230 C 98 180, 132 150, 108 112 C 86 76, 124 48, 96 18"
+              fill="none"
+              stroke="url(#ribbon-gold)"
+              stroke-width="5"
+              stroke-linecap="round"
+              filter="url(#ribbon-blur)"
+            />
+            <path
+              d="M104 230 C 98 180, 132 150, 108 112 C 86 76, 124 48, 96 18"
+              fill="none"
+              stroke="#fff8e4"
+              stroke-width="1.3"
+              stroke-linecap="round"
+            />
+            <g fill="#fff6d0">
+              <polygon points="96,16 99,24 108,24 101,29 104,38 96,33 88,38 91,29 84,24 93,24" />
+              <polygon points="128,78 130,84 136,84 131,88 133,94 128,90 123,94 125,88 120,84 126,84" opacity="0.9" />
+              <polygon points="78,132 80,137 85,137 81,140 83,146 78,142 73,146 75,140 71,137 76,137" opacity="0.75" />
+            </g>
+          </svg>
+          <div class="glow" aria-hidden="true"></div>
+          <div class="letters" id="letters">
+            <div class="jar-stars" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="neck" aria-hidden="true"></div>
+          <div class="bowl" aria-hidden="true"></div>
+          <div class="shine" aria-hidden="true"></div>
+          <div class="mouth" aria-hidden="true"></div>
+          <button type="button" class="lid" id="lid" aria-hidden="true" tabindex="-1" aria-label="Close the jar">
+            <span class="lid-knob"></span>
+            <span class="lid-top"></span>
+            <span class="lid-band"></span>
+          </button>
+          <span class="spark s1" aria-hidden="true"></span>
+          <span class="spark s2" aria-hidden="true"></span>
+          <span class="spark s3" aria-hidden="true"></span>
+          <span class="spark s4" aria-hidden="true"></span>
+          <svg class="tuft" viewBox="0 0 360 100" aria-hidden="true">
+            <ellipse cx="180" cy="78" rx="150" ry="20" fill="#0c4328" />
+            <ellipse cx="150" cy="74" rx="90" ry="14" fill="#1d7344" opacity="0.85" />
+            <ellipse cx="230" cy="76" rx="70" ry="12" fill="#3c9a5c" opacity="0.55" />
+            <ellipse cx="180" cy="70" rx="64" ry="10" fill="#f0cc78" opacity="0.28" />
+            <g fill="none" stroke-linecap="round">
+              <path d="M48 82 C 50 58, 36 46, 32 24" stroke="#145c32" stroke-width="2" />
+              <path d="M70 84 C 74 50, 62 40, 66 18" stroke="#1f7a45" stroke-width="1.6" />
+              <path d="M96 80 C 92 52, 104 36, 98 16" stroke="#0e4e2c" stroke-width="2" />
+              <path d="M124 82 C 130 48, 118 34, 126 14" stroke="#26864c" stroke-width="1.5" />
+              <path d="M250 84 C 246 50, 260 38, 254 18" stroke="#145c32" stroke-width="2" />
+              <path d="M276 80 C 284 46, 270 32, 280 12" stroke="#1c6e40" stroke-width="1.7" />
+              <path d="M304 84 C 300 56, 314 40, 308 22" stroke="#0e4e2c" stroke-width="2" />
+              <path d="M328 78 C 336 52, 324 40, 334 26" stroke="#2a8a4e" stroke-width="1.4" />
+              <path d="M168 86 C 166 60, 176 44, 170 28" stroke="#187244" stroke-width="1.5" />
+              <path d="M196 88 C 202 58, 190 42, 198 22" stroke="#114e2e" stroke-width="1.8" />
+            </g>
+            <g>
+              <ellipse cx="78" cy="62" rx="6" ry="3.4" fill="#8ec4f5" />
+              <ellipse cx="78" cy="62" rx="2" ry="1.3" fill="#fff3c4" />
+              <ellipse cx="142" cy="58" rx="5" ry="3" fill="#fffaf2" />
+              <ellipse cx="142" cy="58" rx="1.6" ry="1.1" fill="#f0c56a" />
+              <ellipse cx="214" cy="60" rx="5.2" ry="3" fill="#f6d4dc" />
+              <ellipse cx="214" cy="60" rx="1.6" ry="1.1" fill="#fff6df" />
+              <ellipse cx="292" cy="64" rx="5.5" ry="3.2" fill="#d7ecff" />
+              <ellipse cx="292" cy="64" rx="1.8" ry="1.2" fill="#ffe7a0" />
+            </g>
+          </svg>
+          <button
+            type="button"
+            class="jar-hit"
+            id="jar-hit"
+            aria-label="Open the wishes jar"
+            aria-describedby="sr-help"
+          ></button>
+        </div>
+      </div>
+
+      <div class="dock">
+        <div class="dock-switch">
+          <p class="hint" id="hint">Tap the jar</p>
+          <button type="button" class="pick" id="pick" hidden>Pick a wish</button>
+        </div>
+        <p class="subhint" id="subhint" hidden>or tap a letter</p>
+        <a
+          class="leave"
+          id="leave"
+          href="https://padlet.com/agnesimmanuela/dear-acs-epseen-s025aby02lplxtpcx9li"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Leave a wish</a
+        >
+      </div>
+      <p class="sr" id="sr-help">
+        The jar begins closed. Open it, then choose a folded letter or pick a wish. Read wishes
+        remember themselves on this phone.
+      </p>
+    </div>
+
+    <div class="veil" id="veil" hidden>
+      <article
+        class="card"
+        id="card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="card-title"
+      >
+        <button type="button" class="close" id="close-letter" aria-label="Fold this wish back into the jar">
+          ×
+        </button>
+        <div class="card-scroll" id="card-scroll">
+          <p class="card-kicker">For ACS &amp; Epseen</p>
+          <h2 id="card-title" tabindex="-1"></h2>
+          <p class="meta" id="card-meta"></p>
+          <div class="card-gallery" id="card-gallery"></div>
+          <div class="card-body" id="card-body"></div>
+        </div>
+        <div class="card-nav">
+          <button type="button" class="nav-btn" id="prev">Previous</button>
+          <span class="pos" id="pos">1 of 11</span>
+          <button type="button" class="nav-btn" id="next">Next</button>
+        </div>
+      </article>
+    </div>
+
+    <noscript>
+      <p class="noscript">
+        This jar needs JavaScript to unfold the letters.
+        <a href="https://padlet.com/agnesimmanuela/dear-acs-epseen-s025aby02lplxtpcx9li">Read the wishes on Padlet</a>.
+      </p>
+    </noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

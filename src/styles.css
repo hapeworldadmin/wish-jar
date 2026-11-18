@@ -205,6 +205,12 @@ body:not(.is-welcome) .welcome {
   display: none;
 }
 
+body.is-welcome {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .welcome {
   position: relative;
   z-index: 2;
@@ -213,46 +219,58 @@ body:not(.is-welcome) .welcome {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   width: min(400px, 100%);
   margin: 0 auto;
   padding:
-    calc(36px + env(safe-area-inset-top))
-    max(28px, env(safe-area-inset-left))
-    calc(22vh + env(safe-area-inset-bottom))
-    max(28px, env(safe-area-inset-right));
+    calc(28px + env(safe-area-inset-top))
+    max(22px, env(safe-area-inset-left))
+    calc(36px + env(safe-area-inset-bottom))
+    max(22px, env(safe-area-inset-right));
+}
+
+.welcome-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 18px 28px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(6, 16, 12, 0.4) 0%, rgba(6, 16, 12, 0.58) 100%);
+  box-shadow: 0 0 0 1px rgba(243, 220, 160, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .welcome h1 {
   margin: 10px 0 0;
 }
 
-.welcome-lead,
-.welcome-how {
-  margin: 0;
-  max-width: 34ch;
+.welcome-copy {
+  margin: 22px 0 0;
+  max-width: 38ch;
   width: 100%;
+}
+
+.welcome-copy p {
+  margin: 0 0 14px;
   font-family: "Source Serif 4", Georgia, "Iowan Old Style", serif;
-  font-size: 16.5px;
-  line-height: 1.7;
+  font-size: 15.5px;
+  line-height: 1.75;
   color: #f7f0d8;
   text-shadow:
     0 1px 2px rgba(0, 0, 0, 0.55),
-    0 6px 20px rgba(0, 0, 0, 0.45);
+    0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
-.welcome-lead {
-  margin-top: 28px;
-}
-
-.welcome-how {
-  margin-top: 16px;
+.welcome-copy p:last-child {
+  margin-bottom: 0;
 }
 
 .welcome-enter {
   appearance: none;
-  margin-top: 36px;
+  margin-top: 26px;
   min-height: 44px;
   padding: 8px 22px;
   border-radius: 999px;

@@ -49,22 +49,30 @@ export function layoutPapers(wishes) {
     n <= 2 ? n : n <= 5 ? 2 : n <= 18 ? 3 : n <= 36 ? 4 : n <= 64 ? 5 : 6;
   const rows = Math.ceil(n / cols);
   const base =
-    n <= 6 ? 56 : n <= 14 ? 52 : n <= 24 ? 42 : n <= 40 ? 36 : n <= 64 ? 28 : 22;
+    n <= 6 ? 72 : n <= 14 ? 68 : n <= 24 ? 48 : n <= 40 ? 38 : n <= 64 ? 28 : 22;
 
   return visible.map((wish, index) => {
     const row = Math.floor(index / cols);
     const itemsInRow = Math.min(cols, n - row * cols);
     const col = index % cols;
     const rand = mulberry32(hashString(wish.id || String(index)));
-    const colT = itemsInRow === 1 ? 0.5 : (col + 0.5) / itemsInRow;
-    const brick = (row % 2 ? 1 : -1) * (7 / cols);
-    const size = base * (0.9 + rand() * 0.22);
-    const x = clamp(colT * 100 + brick + (rand() - 0.5) * 10, 12, 88);
+    const size = base * (0.94 + rand() * 0.14);
+    const brick = (row % 2 ? 1 : -1) * (3 / cols);
+    let x;
+    if (itemsInRow === 1) {
+      x = clamp(50 + brick + (rand() - 0.5) * 8, 22, 78);
+    } else {
+      // Two-item rows sit slightly inward so large envelopes meet in the
+      // middle and still clip against both walls. Fuller rows pin to the glass.
+      const edge = itemsInRow === 2 ? Math.min(24, size * 0.36) : Math.min(10, size * 0.16);
+      const span = (col / (itemsInRow - 1)) * (100 - 2 * edge);
+      x = clamp(edge + span + brick + (rand() - 0.5) * 5, 6, 94);
+    }
     const heightPct = size * 0.5;
     const maxY = clamp(92 - heightPct * 0.4, 52, 88);
     const rowT = rows === 1 ? 0 : row / (rows - 1);
-    const y = clamp(rowT * fill * maxY + (rand() - 0.5) * 3.2, 0, maxY);
-    const rot = (rand() - 0.5) * 28;
+    const y = clamp(rowT * fill * maxY + (rand() - 0.5) * 5, 0, maxY);
+    const rot = (rand() - 0.5) * 44;
     const lit = 0.9 + rand() * 0.22;
     const palette = Math.floor(rand() * 5);
     return {

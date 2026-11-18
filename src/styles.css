@@ -580,13 +580,13 @@ h1 {
 
 .letters {
   position: absolute;
-  left: 10%;
-  right: 10%;
-  top: 22%;
-  bottom: 6%;
+  left: 2.6%;
+  right: 2.6%;
+  top: 21%;
+  bottom: 3.5%;
   z-index: 5;
   overflow: hidden;
-  border-radius: 18% 18% 36% 36% / 8% 8% 28% 28%;
+  border-radius: 8% 8% 14% 14% / 4% 4% 8% 8%;
 }
 
 .jar:not(.is-open) .letters {
@@ -618,7 +618,7 @@ h1 {
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: url("/art/letter-folded.webp") center / contain no-repeat;
+  background: url("/art/letter-folded.webp") center / 100% 100% no-repeat;
   transform: translateX(-50%) rotate(var(--rot));
   transform-origin: center center;
   cursor: pointer;
@@ -775,7 +775,7 @@ h1 {
 }
 
 .jar.is-open .lid {
-  transform: translate(30%, 238%) rotate(48deg);
+  transform: translate(34%, 486%) rotate(38deg);
   animation: lidOpen 2.65s ease-in-out forwards;
 }
 
@@ -837,22 +837,28 @@ h1 {
 .grass {
   position: absolute;
   z-index: 8;
-  left: -10%;
-  right: -10%;
-  bottom: -5%;
-  height: 12%;
+  left: -14%;
+  right: -14%;
+  bottom: -7%;
+  height: 14%;
   pointer-events: none;
   overflow: visible;
-  filter: blur(0.45px);
-  opacity: 0.82;
 }
 
-.grass svg {
-  display: block;
-  width: 100%;
+.grass-tuft {
+  position: absolute;
+  bottom: 0;
+  width: 22%;
   height: 100%;
-  overflow: visible;
+  background: radial-gradient(ellipse at 50% 80%, rgba(18, 42, 24, 0.42), rgba(30, 64, 34, 0.16) 42%, transparent 72%);
+  filter: blur(2.4px);
+  pointer-events: none;
 }
+
+.grass-tuft.t1 { left: 4%; width: 20%; height: 90%; }
+.grass-tuft.t2 { left: 16%; width: 16%; height: 70%; filter: blur(2.8px); opacity: 0.75; }
+.grass-tuft.t3 { right: 16%; left: auto; width: 16%; height: 70%; filter: blur(2.8px); opacity: 0.75; }
+.grass-tuft.t4 { right: 4%; left: auto; width: 20%; height: 90%; }
 
 .tuft {
   position: absolute;
@@ -1353,9 +1359,9 @@ h1 {
   40% { transform: translate(14%, -58%) rotate(-16deg); }
   52% { transform: translate(18%, -72%) rotate(10deg); }
   60% { transform: translate(20%, -68%) rotate(14deg); }
-  80% { transform: translate(28%, 200%) rotate(50deg); }
-  90% { transform: translate(30%, 250%) rotate(42deg); }
-  100% { transform: translate(30%, 238%) rotate(48deg); }
+  80% { transform: translate(30%, 424%) rotate(44deg); }
+  90% { transform: translate(36%, 502%) rotate(32deg); }
+  100% { transform: translate(34%, 486%) rotate(38deg); }
 }
 
 @keyframes lidShadow {
@@ -1408,7 +1414,7 @@ h1 {
 
   .jar.is-open .lid {
     animation: none !important;
-    transform: translate(30%, 238%) rotate(48deg);
+    transform: translate(34%, 486%) rotate(38deg);
   }
 
   .jar.is-open .mouth-beam {

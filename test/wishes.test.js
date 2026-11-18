@@ -130,11 +130,11 @@ test("letters stay inside the jar at both small and large counts", () => {
   for (const paper of [...handful, ...mid, ...crowd]) {
     assert.ok(paper.x >= 0 && paper.x <= 100);
     assert.ok(paper.y >= 0 && paper.y <= 100);
-    assert.ok(paper.size > 8 && paper.size < 70);
+    assert.ok(paper.size > 8 && paper.size < 85);
   }
   const xs = handful.map((paper) => paper.x);
-  assert.ok(Math.min(...xs) <= 24, `left edge ${Math.min(...xs)}`);
-  assert.ok(Math.max(...xs) >= 76, `right edge ${Math.max(...xs)}`);
+  assert.ok(Math.min(...xs) <= 16, `left edge ${Math.min(...xs)}`);
+  assert.ok(Math.max(...xs) >= 84, `right edge ${Math.max(...xs)}`);
   assert.ok(Math.max(...mid.map((paper) => paper.y)) > 70);
   assert.ok(Math.max(...mid.map((paper) => paper.y)) > Math.max(...handful.map((paper) => paper.y)));
   assert.ok(Math.max(...crowd.map((paper) => paper.y)) <= 88);

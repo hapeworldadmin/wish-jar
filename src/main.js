@@ -65,10 +65,30 @@ function stopCardMotion() {
   card.getAnimations().forEach((animation) => animation.cancel());
 }
 
+if (import.meta.env.DEV && new URLSearchParams(location.search).get("demo") === "40") {
+  const sample = state.wishes[0] || {
+    id: "demo",
+    title: "A wish",
+    html: "<p>A wish.</p>",
+    author: "a friend",
+    image: null,
+    images: [],
+    date: null,
+    link: "",
+  };
+  state.wishes = Array.from({ length: 40 }, (_, i) => ({
+    ...sample,
+    id: `demo-40-${i}`,
+    title: sample.title || "A wish",
+  }));
+}
+
 paintFireflies(document.querySelector("#fireflies"));
 render();
 bind();
-refresh();
+if (!(import.meta.env.DEV && new URLSearchParams(location.search).get("demo") === "40")) {
+  refresh();
+}
 
 function loadRead() {
   try {
@@ -157,7 +177,7 @@ function renderLetters() {
   lettersEl.replaceChildren();
   if (stars) lettersEl.appendChild(stars);
   const papers = layoutPapers(state.wishes);
-  for (const paper of papers) {
+  papers.forEach((paper, index) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `paper p${paper.palette}${state.read.has(paper.wish.id) ? " is-read" : ""}`;
@@ -167,6 +187,7 @@ function renderLetters() {
     button.style.setProperty("--rot", `${paper.rot.toFixed(2)}deg`);
     button.style.setProperty("--s", `${paper.size.toFixed(2)}%`);
     button.style.setProperty("--lit", paper.lit.toFixed(2));
+    button.style.setProperty("--i", String(index));
     button.style.zIndex = String(paper.z);
     button.tabIndex = state.open ? 0 : -1;
     const who = paper.wish.author ? ` from ${paper.wish.author}` : "";
@@ -178,7 +199,7 @@ function renderLetters() {
       openLetter(paper.wish.id);
     });
     lettersEl.appendChild(button);
-  }
+  });
 }
 
 function syncJar() {
@@ -206,6 +227,12 @@ function syncJar() {
 function setJarOpen(open) {
   if (state.open === open) return;
   state.open = open;
+  if (open && !reduceMotion) {
+    jar.classList.add("is-opening");
+    window.setTimeout(() => jar.classList.remove("is-opening"), 2800);
+  } else {
+    jar.classList.remove("is-opening");
+  }
   syncJar();
   if (open) {
     pick.focus();
@@ -213,6 +240,26 @@ function setJarOpen(open) {
 }
 
 function showJarScene() {
+  if (!document.body.classList.contains("is-welcome")) return;
+  if (reduceMotion) {
+    finishJarScene();
+    return;
+  }
+  document.body.classList.add("is-entering-jar");
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    finishJarScene();
+  };
+  welcome?.addEventListener("transitionend", (event) => {
+    if (event.propertyName === "opacity") finish();
+  });
+  window.setTimeout(finish, 900);
+}
+
+function finishJarScene() {
+  document.body.classList.remove("is-entering-jar");
   document.body.classList.remove("is-welcome");
   if (welcome) welcome.hidden = true;
   if (app) app.inert = false;

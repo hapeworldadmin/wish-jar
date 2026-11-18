@@ -618,19 +618,15 @@ h1 {
 .lid {
   position: absolute;
   z-index: 7;
-  left: 4.5%;
-  top: -1%;
-  width: 91%;
+  left: 4%;
+  top: -5.185%;
+  width: 92%;
   min-height: 44px;
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition:
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    left 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    top 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    width 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .lid img {
@@ -640,34 +636,8 @@ h1 {
   pointer-events: none;
 }
 
-.lid-closed {
-  position: relative;
-  z-index: 1;
-  transition: opacity 0.45s ease;
-}
-
-.lid-open {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.45s ease;
-}
-
 .jar.is-open .lid {
-  left: 18%;
-  top: 0;
-  width: 64%;
-  transform: translate(78%, 310%) rotate(62deg);
-}
-
-.jar.is-open .lid-closed {
-  opacity: 0;
-}
-
-.jar.is-open .lid-open {
-  opacity: 1;
+  transform: translate(68%, 255%) rotate(58deg);
 }
 
 .spark {

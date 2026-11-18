@@ -108,28 +108,36 @@ test("print export supplies public photos, including more than one", () => {
   assert.deepEqual(enriched[0].images, []);
 });
 
-test("fill level looks generous at ten wishes and nearly full past a hundred", () => {
-  const ten = fillLevel(10);
+test("fill level spans the floor at eleven wishes and nears the neck around forty", () => {
+  const eleven = fillLevel(11);
+  const forty = fillLevel(40);
   const hundred = fillLevel(100);
-  assert.ok(ten > 0.5 && ten < 0.7, `ten wishes fill ${ten}`);
-  assert.ok(hundred > 0.85 && hundred < 0.95, `100 wishes fill ${hundred}`);
-  assert.ok(hundred > ten);
+  assert.ok(eleven > 0.48 && eleven < 0.58, `11 wishes fill ${eleven}`);
+  assert.ok(forty > 0.84 && forty < 0.92, `40 wishes fill ${forty}`);
+  assert.ok(hundred > 0.88 && hundred <= 0.94, `100 wishes fill ${hundred}`);
+  assert.ok(forty > eleven);
+  assert.ok(hundred >= forty);
 });
 
 test("letters stay inside the jar at both small and large counts", () => {
   const make = (n) =>
     Array.from({ length: n }, (_, i) => ({ id: `id-${i}`, title: "Wish" }));
-  const handful = layoutPapers(make(10));
+  const handful = layoutPapers(make(11));
+  const mid = layoutPapers(make(40));
   const crowd = layoutPapers(make(150));
-  assert.equal(handful.length, 10);
+  assert.equal(handful.length, 11);
   assert.equal(crowd.length, MAX_VISIBLE);
-  for (const paper of [...handful, ...crowd]) {
+  for (const paper of [...handful, ...mid, ...crowd]) {
     assert.ok(paper.x >= 0 && paper.x <= 100);
     assert.ok(paper.y >= 0 && paper.y <= 100);
-    assert.ok(paper.size > 8 && paper.size < 60);
+    assert.ok(paper.size > 8 && paper.size < 70);
   }
-  assert.ok(Math.max(...handful.map((paper) => paper.y)) > 20);
-  assert.ok(Math.max(...crowd.map((paper) => paper.y)) > Math.max(...handful.map((paper) => paper.y)));
+  const xs = handful.map((paper) => paper.x);
+  assert.ok(Math.min(...xs) <= 24, `left edge ${Math.min(...xs)}`);
+  assert.ok(Math.max(...xs) >= 76, `right edge ${Math.max(...xs)}`);
+  assert.ok(Math.max(...mid.map((paper) => paper.y)) > 70);
+  assert.ok(Math.max(...mid.map((paper) => paper.y)) > Math.max(...handful.map((paper) => paper.y)));
+  assert.ok(Math.max(...crowd.map((paper) => paper.y)) <= 88);
 });
 
 describe("api handler", { concurrency: 1 }, () => {

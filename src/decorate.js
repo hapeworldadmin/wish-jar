@@ -27,8 +27,7 @@ export function paintFireflies(root) {
   const rand = mulberry32(21);
   for (let i = 0; i < 14; i += 1) {
     const fly = document.createElement("span");
-    const green = i % 4 === 0;
-    fly.className = green ? "firefly firefly-green" : "firefly";
+    fly.className = "firefly";
     fly.style.left = `${8 + rand() * 84}%`;
     fly.style.top = `${18 + rand() * 58}%`;
     fly.style.setProperty("--d", `${7 + rand() * 8}s`);

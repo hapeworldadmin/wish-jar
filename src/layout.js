@@ -20,11 +20,17 @@ export function mulberry32(seed) {
   };
 }
 
-/** Share of the jar interior filled from the bottom. Gentle at ~10, nearly full at 100+. */
+/**
+ * Share of the jar interior filled from the bottom.
+ * A handful spans the floor; around forty wishes reach just below the neck.
+ * Past that, the pile tightens instead of overflowing.
+ */
 export function fillLevel(count) {
   if (count <= 0) return 0;
-  const t = 1 - Math.exp(-count / 18);
-  return 0.34 + 0.56 * t;
+  if (count <= 11) return 0.34 + 0.18 * (count / 11);
+  if (count <= 40) return 0.52 + 0.36 * ((count - 11) / 29);
+  const t = 1 - Math.exp(-(count - 40) / 50);
+  return Math.min(0.94, 0.88 + 0.06 * t);
 }
 
 function clamp(value, min, max) {
@@ -39,21 +45,26 @@ export function layoutPapers(wishes) {
   if (!n) return [];
 
   const fill = fillLevel(count);
-  const cols = n <= 4 ? 2 : n <= 14 ? 3 : n <= 32 ? 4 : n <= 60 ? 5 : 6;
+  const cols =
+    n <= 2 ? n : n <= 5 ? 2 : n <= 18 ? 3 : n <= 36 ? 4 : n <= 64 ? 5 : 6;
   const rows = Math.ceil(n / cols);
-  const base = n <= 6 ? 42 : n <= 12 ? 34 : n <= 24 ? 28 : n <= 48 ? 22 : n <= 80 ? 18 : 15;
-  const rowSpan = (fill * 100) / rows;
+  const base =
+    n <= 6 ? 56 : n <= 14 ? 52 : n <= 24 ? 42 : n <= 40 ? 36 : n <= 64 ? 28 : 22;
 
   return visible.map((wish, index) => {
-    const col = index % cols;
     const row = Math.floor(index / cols);
+    const itemsInRow = Math.min(cols, n - row * cols);
+    const col = index % cols;
     const rand = mulberry32(hashString(wish.id || String(index)));
-    const shift = row % 2 ? 4 : -2;
-    const colCenter = ((col + 1) / (cols + 1)) * 100;
-    const x = clamp(colCenter + shift + (rand() - 0.5) * 7, 16, 84);
-    const y = clamp(row * rowSpan * 0.78 + (rand() - 0.5) * 2.4, 0, 86);
-    const rot = (rand() - 0.5) * 18;
-    const size = base * (0.88 + rand() * 0.28);
+    const colT = itemsInRow === 1 ? 0.5 : (col + 0.5) / itemsInRow;
+    const brick = (row % 2 ? 1 : -1) * (7 / cols);
+    const size = base * (0.9 + rand() * 0.22);
+    const x = clamp(colT * 100 + brick + (rand() - 0.5) * 10, 12, 88);
+    const heightPct = size * 0.5;
+    const maxY = clamp(92 - heightPct * 0.4, 52, 88);
+    const rowT = rows === 1 ? 0 : row / (rows - 1);
+    const y = clamp(rowT * fill * maxY + (rand() - 0.5) * 3.2, 0, maxY);
+    const rot = (rand() - 0.5) * 28;
     const lit = 0.9 + rand() * 0.22;
     const palette = Math.floor(rand() * 5);
     return {

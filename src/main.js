@@ -386,13 +386,13 @@ function openPanel(kind) {
   const blocks = {
     leave: {
       title: "Leave a wish",
-      lines: ["Write to ACS and Epseen on the Padlet. New wishes appear in this jar on their own."],
+      lines: ["Write to Epseen and Angeline on the Padlet. New wishes appear in this jar on their own."],
       link: "Open the Padlet",
     },
     about: {
       title: "About the jar",
       lines: [
-        "A jar of wishes for Angeline (ACS) and Epseen.",
+        "A jar of wishes for Epseen and Angeline.",
         "Saturday, 21 November 2026.",
       ],
     },
@@ -439,7 +439,7 @@ function closePanel() {
 }
 
 function fillCard(wish) {
-  cardTitle.textContent = "Dear ACS & Epseen,";
+  cardTitle.textContent = "Dear Epseen & Angeline,";
   const lead = (wish.title || "").trim();
   const showLead = lead && lead !== "A wish";
   wishLead.hidden = !showLead;

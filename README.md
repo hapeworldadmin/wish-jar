@@ -1,6 +1,6 @@
-# Wishes for ACS & Epseen
+# Wishes for Epseen & Angeline
 
-A mobile-first wishes jar for Angeline (ACS) and Epseen’s wedding on Saturday, 21 November 2026. Friends keep writing on the public Padlet, and this site folds each wish into a letter inside a glowing jar.
+A mobile-first wishes jar for Epseen and Angeline’s wedding on Saturday, 21 November 2026. Friends keep writing on the public Padlet, and this site folds each wish into a letter inside a glowing jar.
 
 ## How live wishes stay in sync
 

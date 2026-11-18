@@ -293,7 +293,7 @@ body:not(.is-welcome) .welcome {
   z-index: 3;
   text-align: center;
   padding-top: 8px;
-  padding-bottom: 6px;
+  padding-bottom: 14px;
 }
 
 .eyebrow {
@@ -322,7 +322,7 @@ h1 {
 .names {
   display: block;
   margin-top: 2px;
-  font-size: clamp(26px, 7.2vw, 38px);
+  font-size: clamp(24px, 6.4vw, 34px);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: 0.02em;
@@ -360,14 +360,14 @@ h1 {
   justify-content: center;
   position: relative;
   z-index: 1;
-  padding: 8px 0 4px;
+  padding: 18px 0 20px;
 }
 
 .jar {
   position: relative;
   z-index: 1;
-  height: min(62dvh, 520px);
-  width: calc(min(62dvh, 520px) * 524 / 945);
+  height: min(50dvh, 430px);
+  width: calc(min(50dvh, 430px) * 524 / 945);
   max-width: 86vw;
   aspect-ratio: 524 / 945;
   overflow: visible;
@@ -618,15 +618,19 @@ h1 {
 .lid {
   position: absolute;
   z-index: 7;
-  left: 18%;
-  top: 0;
-  width: 64%;
+  left: 4.5%;
+  top: -1%;
+  width: 91%;
   min-height: 44px;
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    left 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    top 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .lid img {
@@ -636,8 +640,34 @@ h1 {
   pointer-events: none;
 }
 
+.lid-closed {
+  position: relative;
+  z-index: 1;
+  transition: opacity 0.45s ease;
+}
+
+.lid-open {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
 .jar.is-open .lid {
+  left: 18%;
+  top: 0;
+  width: 64%;
   transform: translate(78%, 310%) rotate(62deg);
+}
+
+.jar.is-open .lid-closed {
+  opacity: 0;
+}
+
+.jar.is-open .lid-open {
+  opacity: 1;
 }
 
 .spark {
@@ -1041,12 +1071,12 @@ h1 {
   }
 
   .names {
-    font-size: 38px;
+    font-size: 34px;
   }
 
   .jar {
-    height: min(58dvh, 520px);
-    width: calc(min(58dvh, 520px) * 524 / 945);
+    height: min(48dvh, 430px);
+    width: calc(min(48dvh, 430px) * 524 / 945);
   }
 }
 
@@ -1056,7 +1086,7 @@ h1 {
   }
 
   .names {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   .eyebrow {
@@ -1064,8 +1094,8 @@ h1 {
   }
 
   .jar {
-    height: min(56dvh, 400px);
-    width: calc(min(56dvh, 400px) * 524 / 945);
+    height: min(48dvh, 360px);
+    width: calc(min(48dvh, 360px) * 524 / 945);
   }
 }
 

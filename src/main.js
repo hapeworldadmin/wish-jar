@@ -24,7 +24,9 @@ const countEl = document.querySelector("#count");
 const hint = document.querySelector("#hint");
 const pick = document.querySelector("#pick");
 const subhint = document.querySelector("#subhint");
-const app = document.querySelector(".app");
+const app = document.querySelector("#app") || document.querySelector(".app");
+const welcome = document.querySelector("#welcome");
+const enterBtn = document.querySelector("#enter");
 const veil = document.querySelector("#veil");
 const card = document.querySelector("#card");
 const cardTitle = document.querySelector("#card-title");
@@ -210,7 +212,18 @@ function setJarOpen(open) {
   }
 }
 
+function showJarScene() {
+  document.body.classList.remove("is-welcome");
+  if (welcome) welcome.hidden = true;
+  if (app) app.inert = false;
+  jarHit?.focus({ preventScroll: true });
+}
+
 function bind() {
+  if (document.body.classList.contains("is-welcome") && app) {
+    app.inert = true;
+  }
+  enterBtn?.addEventListener("click", showJarScene);
   jarHit.addEventListener("click", () => setJarOpen(true));
   lid.addEventListener("click", (event) => {
     event.stopPropagation();

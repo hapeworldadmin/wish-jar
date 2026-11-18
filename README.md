@@ -6,7 +6,7 @@ A mobile-first wishes jar for Angeline (ACS) and Epseen’s wedding on Saturday,
 
 1. Friends post on the Padlet: <https://padlet.com/agnesimmanuela/dear-acs-epseen-s025aby02lplxtpcx9li>
 2. Padlet publishes an RSS feed: <https://padlet.com/padlets/s025aby02lplxtpcx9li/exports/feed.xml>
-3. `GET /api/wishes` (a Vercel serverless function) fetches that feed, plus Padlet’s print export for photos. It parses each `<item>`, keeps only basic text tags in the HTML (`p`, `br`, `strong`, `em`, lists, `blockquote`), and returns JSON.
+3. `GET /api/wishes` (a serverless function on Netlify or Vercel) fetches that feed, plus Padlet’s print export for photos. It parses each `<item>`, keeps only basic text tags in the HTML (`p`, `br`, `strong`, `em`, lists, `blockquote`), and returns JSON.
 4. The response is cached at the CDN for **3 minutes**, and may be served stale for another **5 minutes** while a fresh copy is fetched:
 
    `Cache-Control: public, max-age=60, s-maxage=180, stale-while-revalidate=300`
@@ -38,9 +38,27 @@ Open <http://127.0.0.1:5173>. The dev server uses the same `/api/wishes` functio
 
 `npm run build` writes the static site to `dist/` and refreshes the bundled snapshot first.
 
+## Deploy on Netlify
+
+This is the intended host. Import this GitHub repository, or deploy from a checkout with a [personal access token](https://app.netlify.com/user/applications#personal-access-tokens):
+
+```bash
+# first time only: create the site (skip if acs-epseen already exists)
+NETLIFY_AUTH_TOKEN=… npx netlify-cli sites:create --name acs-epseen --disable-linking
+
+# build and publish to production (creates the site on first run if you pass --site acs-epseen after it exists)
+NETLIFY_AUTH_TOKEN=… npx netlify-cli deploy --build --prod --site acs-epseen
+```
+
+`netlify.toml` already sets the build command (`npm run build`), the publish directory (`dist`), the functions directory, a 200 rewrite from `/api/wishes` to the Netlify function, and the same security headers as `vercel.json`. No environment variables are required. Name the site **acs-epseen** so it is <https://acs-epseen.netlify.app>.
+
+On Netlify, `/api/wishes` also sets `Netlify-CDN-Cache-Control` to the same cache policy as `Cache-Control` (`s-maxage=180, stale-while-revalidate=300`).
+
+The Open Graph tags in `index.html` point at `https://acs-epseen.netlify.app` (and `/og.jpg`) so a WhatsApp preview has a title and image. If the production domain is different, update the `canonical`, `og:url`, `og:image`, and `twitter:image` URLs there.
+
 ## Deploy on Vercel
 
-Import this GitHub repository. Name the project **acs-epseen** so the site is <https://acs-epseen.vercel.app>.
+The site still deploys on Vercel without changes. Import this GitHub repository. Name the project **acs-epseen** so the site is <https://acs-epseen.vercel.app>. If you use that domain in production, change the Open Graph URLs in `index.html` back to it.
 
 | Setting | Value |
 | --- | --- |
@@ -54,8 +72,6 @@ Import this GitHub repository. Name the project **acs-epseen** so the site is <h
 Leave the rest on Vercel’s defaults. `vite` in `package.json` is enough for the preset to be detected, and files in `/api` become serverless functions with no extra config. `vercel.json` only adds a few security headers; it does not set a framework, build, or output directory.
 
 No environment variables are required.
-
-The Open Graph tags point at `https://acs-epseen.vercel.app/og.jpg` so a WhatsApp preview has a title and image. If the production domain is different, update the `og:url` and `og:image` URLs in `index.html`.
 
 ## Fonts
 

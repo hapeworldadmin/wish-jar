@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, test } from "node:test";
 import handler from "../api/wishes.js";
+import netlifyHandler from "../netlify/functions/wishes.mjs";
 import { loadWishes } from "../lib/loadWishes.js";
 import { parseFeedXml } from "../lib/parseFeed.js";
 import { sanitizeWishHtml } from "../lib/sanitize.js";
@@ -185,5 +186,33 @@ describe("api handler", { concurrency: 1 }, () => {
     const res = mockRes();
     await handler({ method: "POST" }, res);
     assert.equal(res.statusCode, 405);
+  });
+});
+
+describe("netlify handler", { concurrency: 1 }, () => {
+  test("returns a web Response with the same cache and JSON", async () => {
+    const previous = globalThis.fetch;
+    globalThis.fetch = async () => ({ ok: true, text: async () => sample });
+    try {
+      const res = await netlifyHandler(new Request("https://example.com/api/wishes"));
+      assert.equal(res.status, 200);
+      assert.match(res.headers.get("Cache-Control"), /s-maxage=180/);
+      assert.match(res.headers.get("Cache-Control"), /stale-while-revalidate=300/);
+      assert.equal(res.headers.get("CDN-Cache-Control"), res.headers.get("Cache-Control"));
+      assert.equal(res.headers.get("Netlify-CDN-Cache-Control"), res.headers.get("Cache-Control"));
+      assert.equal(res.headers.get("X-Wishes-Source"), "padlet");
+      const body = await res.json();
+      assert.equal(body.count, 11);
+      assert.equal(body.wishes[1].author, "");
+    } finally {
+      globalThis.fetch = previous;
+    }
+  });
+
+  test("rejects unsupported methods", async () => {
+    const res = await netlifyHandler(
+      new Request("https://example.com/api/wishes", { method: "POST" }),
+    );
+    assert.equal(res.status, 405);
   });
 });

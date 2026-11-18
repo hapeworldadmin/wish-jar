@@ -52,8 +52,9 @@ export function layoutPapers(wishes) {
     const colCenter = ((col + 1) / (cols + 1)) * 100;
     const x = clamp(colCenter + shift + (rand() - 0.5) * 7, 16, 84);
     const y = clamp(row * rowSpan * 0.78 + (rand() - 0.5) * 2.4, 0, 86);
-    const rot = (rand() - 0.5) * 16;
-    const size = base * (0.9 + rand() * 0.18);
+    const rot = (rand() - 0.5) * 18;
+    const size = base * (0.88 + rand() * 0.28);
+    const lit = 0.9 + rand() * 0.22;
     const palette = Math.floor(rand() * 5);
     return {
       wish,
@@ -61,6 +62,7 @@ export function layoutPapers(wishes) {
       y,
       rot,
       size,
+      lit,
       palette,
       z: row * 10 + col + 1,
     };

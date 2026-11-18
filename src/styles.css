@@ -33,11 +33,7 @@ body {
   min-height: 100dvh;
   color: var(--ink);
   font-family: "Cormorant Garamond", Palatino, "Palatino Linotype", Georgia, serif;
-  background:
-    radial-gradient(ellipse 58% 42% at 80% 4%, rgba(255, 228, 176, 0.28), transparent 62%),
-    radial-gradient(ellipse 42% 32% at 16% 16%, rgba(110, 170, 140, 0.16), transparent 70%),
-    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(24, 90, 52, 0.45), transparent 55%),
-    linear-gradient(180deg, #07140f 0%, #0a2219 24%, #0e3326 52%, #123f2c 74%, #0c2a1e 100%);
+  background: #0b1c36;
   -webkit-font-smoothing: antialiased;
   touch-action: manipulation;
 }
@@ -67,6 +63,24 @@ a {
 
 .scene {
   z-index: 0;
+}
+
+.meadow-bg,
+.meadow-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.meadow-bg img {
+  object-fit: cover;
+  object-position: center 62%;
+}
+
+#fireflies {
+  position: absolute;
+  inset: 0;
 }
 
 .trees {
@@ -275,9 +289,29 @@ h1 {
 .jar {
   position: relative;
   z-index: 1;
-  width: min(74vw, 320px, 42dvh);
-  aspect-ratio: 3 / 4;
+  width: min(70vw, 300px, 46dvh);
+  aspect-ratio: 524 / 945;
   overflow: visible;
+}
+
+.jar-back,
+.jar-front {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.jar-back {
+  z-index: 1;
+}
+
+.jar-front {
+  z-index: 3;
+  opacity: 0.28;
+  mix-blend-mode: screen;
 }
 
 .bloom {
@@ -344,13 +378,13 @@ h1 {
 
 .letters {
   position: absolute;
-  left: 18%;
-  right: 18%;
-  top: 36%;
-  bottom: 14%;
-  z-index: 2;
+  left: 22%;
+  right: 22%;
+  top: 34%;
+  bottom: 16%;
+  z-index: 5;
   overflow: hidden;
-  border-radius: 12% 12% 42% 42%;
+  border-radius: 8% 8% 30% 30%;
 }
 
 .jar:not(.is-open) .letters {
@@ -378,59 +412,38 @@ h1 {
   left: var(--x);
   bottom: var(--y);
   width: var(--s);
-  aspect-ratio: 1.45 / 1;
+  aspect-ratio: 480 / 390;
   padding: 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: 0;
+  background: url("/art/letter-folded.webp") center / contain no-repeat;
   transform: translateX(-50%) rotate(var(--rot));
   transform-origin: center center;
   cursor: pointer;
+  filter: brightness(var(--lit, 1));
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
-    inset 0 -8px 10px rgba(140, 100, 40, 0.08),
-    0 2px 4px rgba(30, 20, 10, 0.3);
+  box-shadow: none;
 }
 
-.paper.p0 { background: linear-gradient(160deg, #fffdf8, #f3e3c2); }
-.paper.p1 { background: linear-gradient(165deg, #fffaf0, #ecd6ae); }
-.paper.p2 { background: linear-gradient(155deg, #fff8ee, #f7e2c4); }
-.paper.p3 { background: linear-gradient(170deg, #fbf6ec, #e6d0a6); }
-.paper.p4 { background: linear-gradient(160deg, #fffdf8, #f8e6c6 70%, #f1d7a4); }
-
-.paper .dogear {
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-style: solid;
-  border-width: 0 8px 8px 0;
-  border-color: transparent rgba(110, 82, 36, 0.22) transparent transparent;
-}
-
-.paper .crease {
-  position: absolute;
-  left: 14%;
-  right: 16%;
-  top: 46%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(120, 90, 40, 0.32), transparent);
-}
-
+.paper .dogear,
+.paper .crease,
 .paper .seal {
-  position: absolute;
-  left: 50%;
-  top: 64%;
-  width: 18%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #f0cfc4, #b15d56 55%, #6d3330);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.28);
+  display: none;
 }
 
-.paper.is-read .seal {
-  background: radial-gradient(circle at 35% 35%, #fff6cf, #e6c15a 46%, #b8892e);
-  box-shadow: 0 0 6px rgba(255, 214, 120, 0.95);
+.paper.is-read {
+  filter: brightness(calc(var(--lit, 1) + 0.12)) saturate(1.08);
+}
+
+.flyer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  width: 120px;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.35));
 }
 
 .paper.is-lifted,
@@ -525,11 +538,10 @@ h1 {
 
 .lid {
   position: absolute;
-  z-index: 6;
-  left: 26%;
-  top: 8%;
-  width: 48%;
-  height: 15%;
+  z-index: 7;
+  left: 18%;
+  top: 0;
+  width: 64%;
   min-height: 44px;
   padding: 0;
   border: 0;
@@ -538,50 +550,15 @@ h1 {
   transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.jar.is-open .lid {
-  transform: translate(-28px, -34px) rotate(-18deg);
-}
-
-.lid-band,
-.lid-top,
-.lid-knob {
-  position: absolute;
+.lid img {
   display: block;
+  width: 100%;
+  height: auto;
   pointer-events: none;
 }
 
-.lid-band {
-  left: 0;
-  right: 0;
-  bottom: 8%;
-  height: 42%;
-  border-radius: 50%;
-  background: linear-gradient(180deg, #fff1c9, #e0b85e 42%, #a07d34);
-  box-shadow:
-    0 3px 5px rgba(0, 0, 0, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
-}
-
-.lid-top {
-  left: 8%;
-  right: 8%;
-  bottom: 22%;
-  height: 48%;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(214, 238, 224, 0.35) 46%, rgba(190, 220, 205, 0.18));
-  border: 1px solid rgba(255, 255, 255, 0.78);
-  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.45);
-}
-
-.lid-knob {
-  left: 50%;
-  top: 0;
-  width: 16px;
-  height: 16px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 32%, #fff, rgba(255, 255, 255, 0.45) 42%, rgba(190, 220, 210, 0.25));
-  border: 1px solid rgba(255, 255, 255, 0.85);
+.jar.is-open .lid {
+  transform: translate(78%, 310%) rotate(62deg);
 }
 
 .spark {
@@ -864,6 +841,28 @@ h1 {
 .card-body b {
   font-weight: 600;
   color: #5c4322;
+}
+
+.signoff {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 6px 12px;
+  margin: 16px 0 8px;
+}
+
+.from-line {
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(28px, 8vw, 36px);
+  line-height: 1.15;
+  color: #6a4b28;
+}
+
+.from-date {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 14px;
+  color: #7a6244;
 }
 
 .card-nav {

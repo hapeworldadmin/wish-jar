@@ -39,12 +39,9 @@ test("sample feed becomes eleven wishes with images and signatures", () => {
   assert.equal(wishes.filter((wish) => wish.image).length, 3);
   assert.equal(wishes[0].image, null);
   assert.match(wishes[1].image, /^https:\/\/padlet-uploads/);
-  assert.equal(wishes[1].author, "San");
-  assert.equal(wishes[3].author, "Partner skripsinya ACS");
-  assert.equal(wishes[4].author, "Hayo tebak");
-  assert.equal(wishes[6].author, "Mel");
-  assert.equal(wishes[8].author, "Jo");
-  assert.equal(wishes[2].author, "");
+  assert.equal(wishes[1].author, "");
+  assert.equal(wishes[3].author, "");
+  assert.equal(wishes[8].author, "");
   assert.match(wishes[2].title, /^ACS & Epseen/);
   assert.match(wishes[1].html, /<ol>/);
   assert.match(wishes[1].html, /Never stop dating each other/);
@@ -67,6 +64,30 @@ test("unsafe enclosure urls are dropped", () => {
   assert.equal(wishes[0].image, null);
   assert.equal(wishes[1].image, null);
   assert.equal(wishes[1].author, "Ada");
+});
+
+test("print attribution is kept exactly, including nicknames and emoji", () => {
+  const wishes = parseFeedXml(`<?xml version="1.0"?><rss><channel>
+    <item><title>Hello</title><author></author><description><p>Xoxo, San</p></description>
+      <link>https://padlet.com/x/wish/9</link><pubDate>2026-11-09 00:00:00 UTC</pubDate></item>
+    <item><title>Named</title><author>Ada</author><description><p>Hi</p></description>
+      <link>https://padlet.com/x/wish/10</link><pubDate>2026-11-09 01:00:00 UTC</pubDate></item>
+  </channel></rss>`);
+  const printHtml = `
+    <article><span class="post-author"><span class="user-link">Hayo siapa y</span></span>
+      <h4 class="post-subject">Hello</h4></article>
+    <article><span class="post-author"><span class="user-link">partner skripsi acees</span></span>
+      <h4 class="post-subject">Named</h4></article>
+    <article><span class="post-author"><span class="user-link">el</span></span>
+      <h4 class="post-subject">Missing</h4></article>`;
+  const enriched = attachPrintImages(wishes, printHtml);
+  assert.equal(enriched.find((wish) => wish.title === "Hello").author, "Hayo siapa y");
+  assert.equal(enriched.find((wish) => wish.title === "Named").author, "Ada");
+  const emoji = attachPrintImages(
+    [{ id: "1", title: "Heart", author: "", html: "", image: null, images: [], date: null, link: "" }],
+    `<article><span class="post-author"><span class="user-link">❤️</span></span><h4 class="post-subject">Heart</h4></article>`,
+  );
+  assert.equal(emoji[0].author, "❤️");
 });
 
 test("print export supplies public photos, including more than one", () => {
@@ -131,7 +152,7 @@ describe("api handler", { concurrency: 1 }, () => {
       assert.equal(res.headers["X-Wishes-Source"], "padlet");
       const body = JSON.parse(res.body);
       assert.equal(body.count, 11);
-      assert.equal(body.wishes[1].author, "San");
+      assert.equal(body.wishes[1].author, "");
     } finally {
       globalThis.fetch = previous;
     }

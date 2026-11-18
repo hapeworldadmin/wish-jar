@@ -7,7 +7,7 @@ import "@fontsource/source-serif-4/latin-600.css";
 import "@fontsource/source-serif-4/latin-400-italic.css";
 import "./styles.css";
 
-import { paintFireflies, paintMeadow, paintSky } from "./decorate.js";
+import { paintFireflies } from "./decorate.js";
 import { fallbackPayload } from "./data/fallback-wishes.js";
 import { layoutPapers } from "./layout.js";
 import { usableImage } from "../lib/printImages.js";
@@ -28,15 +28,26 @@ const app = document.querySelector(".app");
 const veil = document.querySelector("#veil");
 const card = document.querySelector("#card");
 const cardTitle = document.querySelector("#card-title");
-const cardMeta = document.querySelector("#card-meta");
+const wishLead = document.querySelector("#wish-lead");
+const fromLine = document.querySelector("#from-line");
+const fromDate = document.querySelector("#from-date");
+const panel = document.querySelector("#panel");
+const panelCard = document.querySelector("#panel-card");
+const panelTitle = document.querySelector("#panel-title");
+const panelBody = document.querySelector("#panel-body");
+const closePanelBtn = document.querySelector("#close-panel");
+const aboutBtn = document.querySelector("#about");
 const cardBody = document.querySelector("#card-body");
 const cardGallery = document.querySelector("#card-gallery");
 const cardScroll = document.querySelector("#card-scroll");
 const posEl = document.querySelector("#pos");
 const closeBtn = document.querySelector("#close-letter");
+const flyer = document.querySelector("#flyer");
 const prevBtn = document.querySelector("#prev");
 const nextBtn = document.querySelector("#next");
 const leave = document.querySelector("#leave");
+let padletUrl = "https://padlet.com/agnesimmanuela/dear-acs-epseen-s025aby02lplxtpcx9li";
+let toldFallback = false;
 
 const state = {
   wishes: sortWishes(fallbackPayload.wishes.map(normalizeWish).filter(Boolean)),
@@ -52,9 +63,7 @@ function stopCardMotion() {
   card.getAnimations().forEach((animation) => animation.cancel());
 }
 
-paintSky(document.querySelector("#stars"));
 paintFireflies(document.querySelector("#fireflies"));
-paintMeadow(document.querySelector("#meadow-life"));
 render();
 bind();
 refresh();
@@ -102,7 +111,7 @@ function normalizeWish(raw) {
     id,
     title: stripTags(raw.title || "A wish").slice(0, 500) || "A wish",
     html: sanitizeWishHtml(raw.html || "").slice(0, 20000),
-    author: stripTags(raw.author || "").slice(0, 80),
+    author: typeof raw.author === "string" ? raw.author.replace(/^\s+|\s+$/g, "") : "",
     image: images[0] || null,
     images,
     date: typeof raw.date === "string" ? raw.date : null,
@@ -118,14 +127,13 @@ function countText() {
   return read ? `${base} · ${read} read` : base;
 }
 
-function formatDate(iso) {
+function formatSignDate(iso) {
   if (!iso) return "";
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return "";
   return new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
     month: "short",
-    year: "numeric",
     timeZone: "Asia/Jakarta",
   }).format(date);
 }
@@ -156,6 +164,7 @@ function renderLetters() {
     button.style.setProperty("--y", `${paper.y}%`);
     button.style.setProperty("--rot", `${paper.rot.toFixed(2)}deg`);
     button.style.setProperty("--s", `${paper.size.toFixed(2)}%`);
+    button.style.setProperty("--lit", paper.lit.toFixed(2));
     button.style.zIndex = String(paper.z);
     button.tabIndex = state.open ? 0 : -1;
     const who = paper.wish.author ? ` from ${paper.wish.author}` : "";
@@ -209,6 +218,13 @@ function bind() {
     else if (veil.hidden) setJarOpen(false);
   });
   pick.addEventListener("click", pickWish);
+  leave.addEventListener("click", () => openPanel("leave"));
+  aboutBtn.addEventListener("click", () => openPanel("about"));
+  closePanelBtn.addEventListener("click", closePanel);
+  panel.addEventListener("click", (event) => {
+    if (event.target === panel) closePanel();
+  });
+  panelCard.addEventListener("click", (event) => event.stopPropagation());
   closeBtn.addEventListener("click", () => closeLetter());
   prevBtn.addEventListener("click", () => step(-1));
   nextBtn.addEventListener("click", () => step(1));
@@ -226,7 +242,8 @@ cardGallery.addEventListener(
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      if (!veil.hidden) closeLetter();
+      if (!panel.hidden) closePanel();
+      else if (!veil.hidden) closeLetter();
       else if (state.open) setJarOpen(false);
       return;
     }
@@ -286,11 +303,139 @@ function markRead(id) {
   countEl.textContent = countText();
 }
 
+function envelopeFrame(target) {
+  const rect = target?.getBoundingClientRect();
+  if (rect && rect.width > 0) {
+    return {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      rot: target.style?.getPropertyValue("--rot") || "-8deg",
+    };
+  }
+  const jarRect = jar.getBoundingClientRect();
+  return {
+    left: jarRect.left + jarRect.width * 0.32,
+    top: jarRect.top + jarRect.height * 0.48,
+    width: jarRect.width * 0.36,
+    height: jarRect.width * 0.29,
+    rot: "-8deg",
+  };
+}
+
+async function flyEnvelope(target, direction) {
+  if (!flyer || reduceMotion) return;
+  const from = envelopeFrame(target);
+  const width = Math.min(150, window.innerWidth * 0.42);
+  const height = width * (390 / 480);
+  const center = {
+    left: window.innerWidth / 2 - width / 2,
+    top: window.innerHeight * 0.34,
+    width,
+    height,
+    rot: "0deg",
+  };
+  const start = direction === "out" ? from : center;
+  const end = direction === "out" ? { ...center, opacity: 0 } : from;
+  flyer.hidden = false;
+  const anim = flyer.animate(
+    [
+      {
+        left: `${start.left}px`,
+        top: `${start.top}px`,
+        width: `${start.width}px`,
+        height: `${start.height}px`,
+        transform: `rotate(${start.rot})`,
+        opacity: 1,
+      },
+      {
+        left: `${end.left}px`,
+        top: `${end.top}px`,
+        width: `${end.width}px`,
+        height: `${end.height}px`,
+        transform: `rotate(${end.rot || "0deg"})`,
+        opacity: end.opacity ?? 1,
+      },
+    ],
+    { duration: direction === "out" ? 640 : 480, easing: "cubic-bezier(.16,1,.3,1)", fill: "forwards" },
+  );
+  try {
+    await anim.finished;
+  } catch {
+    /* replaced */
+  }
+  flyer.hidden = true;
+  anim.cancel();
+}
+
+function openPanel(kind) {
+  const blocks = {
+    leave: {
+      title: "Leave a wish",
+      lines: ["Write to ACS and Epseen on the Padlet. New wishes appear in this jar on their own."],
+      link: "Open the Padlet",
+    },
+    about: {
+      title: "About the jar",
+      lines: [
+        "A jar of wishes for Angeline (ACS) and Epseen.",
+        "Saturday, 21 November 2026.",
+      ],
+    },
+    empty: {
+      title: "The jar is waiting",
+      lines: ["No wishes yet. Be the first to leave one."],
+      link: "Leave a wish",
+    },
+    error: {
+      title: "Saved wishes",
+      lines: ["The live Padlet could not be reached just now, so the jar is showing the wishes it already saved."],
+    },
+  };
+  const block = blocks[kind];
+  panelTitle.textContent = block.title;
+  panelBody.replaceChildren();
+  for (const line of block.lines) {
+    const paragraph = document.createElement("p");
+    paragraph.textContent = line;
+    panelBody.appendChild(paragraph);
+  }
+  if (block.link) {
+    const paragraph = document.createElement("p");
+    const anchor = document.createElement("a");
+    anchor.className = "panel-link";
+    anchor.href = padletUrl;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    anchor.textContent = block.link;
+    paragraph.appendChild(anchor);
+    panelBody.appendChild(paragraph);
+  }
+  panel.hidden = false;
+  document.body.classList.add("panel-open");
+  if (veil.hidden) app.inert = true;
+  panelTitle.focus({ preventScroll: true });
+}
+
+function closePanel() {
+  if (panel.hidden) return;
+  panel.hidden = true;
+  document.body.classList.remove("panel-open");
+  if (veil.hidden) app.inert = false;
+}
+
 function fillCard(wish) {
-  cardTitle.textContent = wish.title || "A wish";
-  const who = wish.author || "A friend";
-  const when = formatDate(wish.date);
-  cardMeta.textContent = when ? `${who} · ${when}` : who;
+  cardTitle.textContent = "Dear ACS & Epseen,";
+  const lead = (wish.title || "").trim();
+  const showLead = lead && lead !== "A wish";
+  wishLead.hidden = !showLead;
+  wishLead.textContent = showLead ? lead : "";
+  const name = wish.author ? wish.author : "a friend";
+  fromLine.textContent = `From: ${name}`;
+  const when = formatSignDate(wish.date);
+  fromDate.textContent = when;
+  fromDate.hidden = !when;
   cardBody.innerHTML = sanitizeWishHtml(wish.html || "");
   cardGallery.replaceChildren();
   const photos = wish.images?.length ? wish.images : wish.image ? [wish.image] : [];
@@ -323,14 +468,19 @@ async function openLetter(id, { unfold = true } = {}) {
   document.body.classList.add("reading");
   cardScroll.scrollTop = 0;
 
+  const sourcePaper = lettersEl.querySelector(`[data-wish-id="${CSS.escape(id)}"]`);
   if (!reduceMotion && wasClosed && unfold) {
+    card.style.opacity = "0";
+    if (sourcePaper) sourcePaper.style.visibility = "hidden";
+    await flyEnvelope(sourcePaper, "out");
+    if (sourcePaper) sourcePaper.style.visibility = "";
+    card.style.opacity = "";
     card.animate(
       [
-        { transform: "translateY(28vh) scale(0.18, 0.1) rotate(-8deg)", opacity: 0.2 },
-        { transform: "translateY(8vh) scale(0.62, 0.45) rotate(-2deg)", opacity: 1, offset: 0.48 },
-        { transform: "translateY(0) scale(1) rotate(0deg)", opacity: 1 },
+        { opacity: 0, transform: "scale(0.96)" },
+        { opacity: 1, transform: "none" },
       ],
-      { duration: 720, easing: "cubic-bezier(.16,1,.3,1)", fill: "both" },
+      { duration: 220, easing: "ease-out", fill: "both" },
     );
   } else if (!reduceMotion && !wasClosed) {
     card.animate(
@@ -349,19 +499,21 @@ async function closeLetter() {
   const token = ++motion;
   const id = state.activeId;
   stopCardMotion();
+  const sourcePaper = id ? lettersEl.querySelector(`[data-wish-id="${CSS.escape(id)}"]`) : null;
   if (!reduceMotion) {
     const anim = card.animate(
       [
-        { transform: "none", opacity: 1 },
-        { transform: "translateY(26vh) scale(0.16, 0.1) rotate(-7deg)", opacity: 0 },
+        { opacity: 1, transform: "none" },
+        { opacity: 0, transform: "scale(0.96)" },
       ],
-      { duration: 460, easing: "cubic-bezier(.4,0,.8,1)", fill: "forwards" },
+      { duration: 180, easing: "ease-in", fill: "forwards" },
     );
     try {
       await anim.finished;
     } catch {
       /* a newer open or close replaced this one */
     }
+    if (token === motion) await flyEnvelope(sourcePaper, "back");
   }
   if (token !== motion) return;
   veil.hidden = true;
@@ -383,7 +535,7 @@ async function refresh() {
     if (!wishes.length) throw new Error("empty");
     state.source = data.source === "fallback" ? "fallback" : "padlet";
     if (typeof data.padletUrl === "string" && data.padletUrl.startsWith("https://")) {
-      leave.href = data.padletUrl;
+      padletUrl = data.padletUrl;
     }
     const same =
       wishes.length === state.wishes.length &&
@@ -405,6 +557,11 @@ async function refresh() {
       syncJar();
     }
     countEl.textContent = countText();
+    if (!state.wishes.length) openPanel("empty");
+    else if (state.source === "fallback" && !toldFallback && veil.hidden && panel.hidden) {
+      toldFallback = true;
+      openPanel("error");
+    }
     if (state.activeId) {
       const still = state.wishes.find((wish) => wish.id === state.activeId);
       if (still) fillCard(still);
@@ -412,6 +569,11 @@ async function refresh() {
     }
   } catch (error) {
     document.body.dataset.wishesSource = "fallback";
+    state.source = "fallback";
+    if (!toldFallback && veil.hidden && panel.hidden) {
+      toldFallback = true;
+      openPanel("error");
+    }
     console.info("Showing the saved wishes.", error);
   }
 }

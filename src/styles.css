@@ -1364,6 +1364,20 @@ h1 {
   100% { transform: translate(34%, 486%) rotate(38deg); }
 }
 
+@keyframes lidOpenWide {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  8% { transform: translate(0, -1.5%) rotate(-12deg); }
+  14% { transform: translate(0, 0.8%) rotate(7deg); }
+  20% { transform: translate(0, -2.5%) rotate(-16deg); }
+  24% { transform: translate(0, -4%) rotate(-6deg); }
+  40% { transform: translate(14%, -58%) rotate(-16deg); }
+  52% { transform: translate(18%, -72%) rotate(10deg); }
+  60% { transform: translate(20%, -68%) rotate(14deg); }
+  80% { transform: translate(85%, 430%) rotate(36deg); }
+  90% { transform: translate(104%, 518%) rotate(22deg); }
+  100% { transform: translate(100%, 500%) rotate(28deg); }
+}
+
 @keyframes lidShadow {
   0%, 70% { opacity: 0; transform: scale(0.5); }
   88% { opacity: 0.7; transform: scale(1.08); }
@@ -1388,6 +1402,13 @@ h1 {
   0% { opacity: 0.55; }
   40% { opacity: 1; }
   100% { opacity: 1; }
+}
+
+@media (min-width: 768px) {
+  .jar.is-open .lid {
+    transform: translate(100%, 500%) rotate(28deg);
+    animation-name: lidOpenWide;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1415,6 +1436,12 @@ h1 {
   .jar.is-open .lid {
     animation: none !important;
     transform: translate(34%, 486%) rotate(38deg);
+  }
+
+  @media (min-width: 768px) {
+    .jar.is-open .lid {
+      transform: translate(100%, 500%) rotate(28deg);
+    }
   }
 
   .jar.is-open .mouth-beam {
